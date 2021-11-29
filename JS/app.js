@@ -23,10 +23,42 @@ Display.prototype.add = function(book){
                     </tr>`;
     tableBody.innerHTML += uistring;
 }
+
+//clear function
 Display.prototype.clear = function(){
     let libraryForm = document.getElementById("libraryForm");
     libraryForm.reset();
 }
+
+//validate function
+Display.prototype.validate = function(book){
+    if(book.name.length<2 || book.author.length<2)
+    {
+        return false;
+    }
+    else
+    {
+        return true;
+    }
+}
+
+
+//show fucntion
+Display.prototype.show = function(type, msg){
+    let message = document.getElementById("message");
+    message.innerHTML = `
+                            <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+                                <strong>Message: </strong> ${msg}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        `;
+
+    setTimeout(function(){
+        message.innerHTML = "";
+    }, 7000);
+}
+
+
 
 //eventlistner for LibraryForm
 let libraryForm = document.getElementById("libraryForm");
@@ -62,8 +94,18 @@ function libraryFormSubmit(e) {
     console.log(book);
 
     let display = new Display();
+
+    if(display.validate(book))
+    {
     display.add(book);
     display.clear();
+    display.show('success', 'Your book has been added successfully.')
+    }
+    else
+    {
+        //showing error
+        display.show('danger', 'Sorry, this is not the right format of adding a book.')
+    }
 
     e.preventDefault();
 
